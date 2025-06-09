@@ -25,6 +25,7 @@ class GaugeWidget extends StatefulWidget {
   final bool showNeedle;
   final List<GaugeRange>? ranges;
   final String? title;
+  final TextStyle? titleStyle;
 
   const GaugeWidget({
     Key? key,
@@ -43,6 +44,7 @@ class GaugeWidget extends StatefulWidget {
     this.showNeedle = true,
     this.ranges,
     this.title,
+    this.titleStyle,
   }) : super(key: key);
 
   @override
@@ -112,6 +114,8 @@ class _GaugeWidgetState extends State<GaugeWidget>
               showNeedle: widget.showNeedle,
               ranges: widget.ranges,
               title: widget.title,
+              titleStyle: widget.titleStyle ??
+                  Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             child: null,
           );
@@ -134,6 +138,7 @@ class _GaugePainter extends CustomPainter {
   final bool showNeedle;
   final List<GaugeRange>? ranges;
   final String? title;
+  final TextStyle? titleStyle;
 
   _GaugePainter({
     required this.min,
@@ -148,6 +153,7 @@ class _GaugePainter extends CustomPainter {
     required this.showNeedle,
     this.ranges,
     this.title,
+    this.titleStyle,
   });
 
   @override
@@ -290,7 +296,7 @@ class _GaugePainter extends CustomPainter {
 
     // Draw title if provided
     if (title != null && title!.isNotEmpty) {
-      final textStyle = const TextStyle(
+      final textStyle = titleStyle ?? const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
         color: Colors.black,
