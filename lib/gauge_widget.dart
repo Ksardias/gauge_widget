@@ -94,33 +94,46 @@ class _GaugeWidgetState extends State<GaugeWidget>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: widget.size,
-      height: widget.size,
-      child: AnimatedBuilder(
-        animation: _animation,
-        builder: (_, __) {
-          return CustomPaint(
-            painter: _GaugePainter(
-              min: widget.min,
-              max: widget.max,
-              value: _animation.value,
-              thickness: widget.thickness,
-              backgroundColor: widget.backgroundColor,
-              progressColor: widget.progressColor,
-              needleColor: widget.needleColor,
-              labelStyle: widget.labelStyle,
-              showLabels: widget.showLabels,
-              showNeedle: widget.showNeedle,
-              ranges: widget.ranges,
-              title: widget.title,
-              titleStyle: widget.titleStyle ??
-                  Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              child: AnimatedBuilder(
+                animation: _animation,
+                builder: (_, __) {
+                  final double size = min(constraints.maxWidth, constraints.maxHeight);
+                  return Center(
+                    child: SizedBox(
+                      width: size,
+                      height: size,
+                      child: CustomPaint(
+                        painter: _GaugePainter(
+                          min: widget.min,
+                          max: widget.max,
+                          value: _animation.value,
+                          thickness: widget.thickness,
+                          backgroundColor: widget.backgroundColor,
+                          progressColor: widget.progressColor,
+                          needleColor: widget.needleColor,
+                          labelStyle: widget.labelStyle,
+                          showLabels: widget.showLabels,
+                          showNeedle: widget.showNeedle,
+                          ranges: widget.ranges,
+                          title: widget.title,
+                          titleStyle: widget.titleStyle,
+                        ),
+                        child: null,
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-            child: null,
-          );
-        },
-      ),
+          ],
+        );
+      },
     );
   }
 }
