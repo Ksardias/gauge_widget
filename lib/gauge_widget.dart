@@ -24,8 +24,6 @@ class GaugeWidget extends StatefulWidget {
   final bool showLabels;
   final bool showNeedle;
   final List<GaugeRange>? ranges;
-  final Widget? title;
-  final TextStyle? titleStyle;
 
   const GaugeWidget({
     Key? key,
@@ -43,8 +41,6 @@ class GaugeWidget extends StatefulWidget {
     this.showLabels = true,
     this.showNeedle = true,
     this.ranges,
-    this.title,
-    this.titleStyle,
   }) : super(key: key);
 
   @override
@@ -97,42 +93,26 @@ class _GaugeWidgetState extends State<GaugeWidget>
     return SizedBox(
       width: widget.size,
       height: widget.size,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: widget.size,
-            height: widget.size * 0.8,
-            child: AnimatedBuilder(
-              animation: _animation,
-              builder: (_, __) {
-                return CustomPaint(
-                  painter: _GaugePainter(
-                    min: widget.min,
-                    max: widget.max,
-                    value: _animation.value,
-                    thickness: widget.thickness,
-                    backgroundColor: widget.backgroundColor,
-                    progressColor: widget.progressColor,
-                    needleColor: widget.needleColor,
-                    labelStyle: widget.labelStyle,
-                    showLabels: widget.showLabels,
-                    showNeedle: widget.showNeedle,
-                    ranges: widget.ranges,
-                    title: widget.title,
-                    titleStyle: widget.titleStyle ?? Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  child: null,
-                );
-              },
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (_, __) {
+          return CustomPaint(
+            painter: _GaugePainter(
+              min: widget.min,
+              max: widget.max,
+              value: _animation.value,
+              thickness: widget.thickness,
+              backgroundColor: widget.backgroundColor,
+              progressColor: widget.progressColor,
+              needleColor: widget.needleColor,
+              labelStyle: widget.labelStyle,
+              showLabels: widget.showLabels,
+              showNeedle: widget.showNeedle,
+              ranges: widget.ranges,
             ),
-          ),
-          if (widget.title != null)
-            Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: widget.title,
-            ),
-        ],
+            child: null,
+          );
+        },
       ),
     );
   }
@@ -150,8 +130,6 @@ class _GaugePainter extends CustomPainter {
   final bool showLabels;
   final bool showNeedle;
   final List<GaugeRange>? ranges;
-  final Widget? title;
-  final TextStyle? titleStyle;
 
   _GaugePainter({
     required this.min,
@@ -165,8 +143,6 @@ class _GaugePainter extends CustomPainter {
     required this.showLabels,
     required this.showNeedle,
     this.ranges,
-    this.title,
-    this.titleStyle,
   });
 
   @override
