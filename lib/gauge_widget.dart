@@ -114,7 +114,7 @@ class _GaugeWidgetState extends State<GaugeWidget>
               showNeedle: widget.showNeedle,
               ranges: widget.ranges,
               title: widget.title,
-              titleStyle: widget.titleStyle,
+              titleStyle: widget.titleStyle ?? Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             child: null,
           );
