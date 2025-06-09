@@ -24,7 +24,7 @@ class GaugeWidget extends StatefulWidget {
   final bool showLabels;
   final bool showNeedle;
   final List<GaugeRange>? ranges;
-  final String? title;
+  final Widget? title;
   final TextStyle? titleStyle;
 
   const GaugeWidget({
@@ -97,28 +97,39 @@ class _GaugeWidgetState extends State<GaugeWidget>
     return SizedBox(
       width: widget.size,
       height: widget.size,
-      child: AnimatedBuilder(
-        animation: _animation,
-        builder: (_, __) {
-          return CustomPaint(
-            painter: _GaugePainter(
-              min: widget.min,
-              max: widget.max,
-              value: _animation.value,
-              thickness: widget.thickness,
-              backgroundColor: widget.backgroundColor,
-              progressColor: widget.progressColor,
-              needleColor: widget.needleColor,
-              labelStyle: widget.labelStyle,
-              showLabels: widget.showLabels,
-              showNeedle: widget.showNeedle,
-              ranges: widget.ranges,
-              title: widget.title,
-              titleStyle: widget.titleStyle ?? Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+      child: Stack(
+        children: [
+          AnimatedBuilder(
+            animation: _animation,
+            builder: (_, __) {
+              return CustomPaint(
+                painter: _GaugePainter(
+                  min: widget.min,
+                  max: widget.max,
+                  value: _animation.value,
+                  thickness: widget.thickness,
+                  backgroundColor: widget.backgroundColor,
+                  progressColor: widget.progressColor,
+                  needleColor: widget.needleColor,
+                  labelStyle: widget.labelStyle,
+                  showLabels: widget.showLabels,
+                  showNeedle: widget.showNeedle,
+                  ranges: widget.ranges,
+                  title: widget.title,
+                  titleStyle: widget.titleStyle ?? Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                child: null,
+              );
+            },
+          ),
+          if (widget.title != null)
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: widget.title,
+              ),
             ),
-            child: null,
-          );
-        },
+        ],
       ),
     );
   }
@@ -136,7 +147,7 @@ class _GaugePainter extends CustomPainter {
   final bool showLabels;
   final bool showNeedle;
   final List<GaugeRange>? ranges;
-  final String? title;
+  final Widget? title;
   final TextStyle? titleStyle;
 
   _GaugePainter({
@@ -291,32 +302,6 @@ class _GaugePainter extends CustomPainter {
         canvas,
         center - Offset(textPainter.width / 2, textPainter.height / 2),
       );
-    }
-
-    // Draw title if provided
-    if (title != null && title!.isNotEmpty) {
-      final titleTextPainter = TextPainter(
-        text: TextSpan(
-          text: title,
-          style: titleStyle ?? const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
-        ),
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
-      );
-      titleTextPainter.layout(maxWidth: size.width * 0.8);
-
-      final labelRadius = radius - thickness - 10;
-      // Calculate the position for the title based on the label positions
-      final firstLabelAngle = startAngle;
-      final lastLabelAngle = startAngle + sweepAngle;
-      final firstLabelY = center.dy + labelRadius * sin(firstLabelAngle);
-      final lastLabelY = center.dy + labelRadius * sin(lastLabelAngle);
-      final titleY = (firstLabelY + lastLabelY) / 2;
-      final titleOffset = Offset(
-        (size.width - titleTextPainter.width) / 2,
-        titleY + 18, // +18 to position below the labels
-      );
-      titleTextPainter.paint(canvas, titleOffset);
     }
   }
 
