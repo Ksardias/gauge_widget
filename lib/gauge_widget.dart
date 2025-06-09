@@ -149,8 +149,9 @@ class _GaugePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = (size.width / 2) - thickness / 2;
-    final startAngle = pi;
-    final sweepAngle = pi;
+    // Zmieniamy zakres z 180 na 270 stopni
+    final startAngle = 3 * pi / 4; // 135°
+    final sweepAngle = 3 * pi / 2; // 270°
 
     final rect = Rect.fromCircle(center: center, radius: radius);
 
