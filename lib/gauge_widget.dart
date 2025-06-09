@@ -97,37 +97,40 @@ class _GaugeWidgetState extends State<GaugeWidget>
     return SizedBox(
       width: widget.size,
       height: widget.size,
-      child: Stack(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          AnimatedBuilder(
-            animation: _animation,
-            builder: (_, __) {
-              return CustomPaint(
-                painter: _GaugePainter(
-                  min: widget.min,
-                  max: widget.max,
-                  value: _animation.value,
-                  thickness: widget.thickness,
-                  backgroundColor: widget.backgroundColor,
-                  progressColor: widget.progressColor,
-                  needleColor: widget.needleColor,
-                  labelStyle: widget.labelStyle,
-                  showLabels: widget.showLabels,
-                  showNeedle: widget.showNeedle,
-                  ranges: widget.ranges,
-                  title: widget.title,
-                  titleStyle: widget.titleStyle ?? Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                child: null,
-              );
-            },
+          SizedBox(
+            width: widget.size,
+            height: widget.size * 0.8,
+            child: AnimatedBuilder(
+              animation: _animation,
+              builder: (_, __) {
+                return CustomPaint(
+                  painter: _GaugePainter(
+                    min: widget.min,
+                    max: widget.max,
+                    value: _animation.value,
+                    thickness: widget.thickness,
+                    backgroundColor: widget.backgroundColor,
+                    progressColor: widget.progressColor,
+                    needleColor: widget.needleColor,
+                    labelStyle: widget.labelStyle,
+                    showLabels: widget.showLabels,
+                    showNeedle: widget.showNeedle,
+                    ranges: widget.ranges,
+                    title: widget.title,
+                    titleStyle: widget.titleStyle ?? Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  child: null,
+                );
+              },
+            ),
           ),
           if (widget.title != null)
-            Positioned.fill(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: widget.title,
-              ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: widget.title,
             ),
         ],
       ),
