@@ -24,6 +24,7 @@ class GaugeWidget extends StatefulWidget {
   final bool showLabels;
   final bool showNeedle;
   final List<GaugeRange>? ranges;
+  final String? title;
 
   const GaugeWidget({
     Key? key,
@@ -41,6 +42,7 @@ class GaugeWidget extends StatefulWidget {
     this.showLabels = true,
     this.showNeedle = true,
     this.ranges,
+    this.title,
   }) : super(key: key);
 
   @override
@@ -109,6 +111,7 @@ class _GaugeWidgetState extends State<GaugeWidget>
               showLabels: widget.showLabels,
               showNeedle: widget.showNeedle,
               ranges: widget.ranges,
+              title: widget.title,
             ),
             child: null,
           );
@@ -130,6 +133,7 @@ class _GaugePainter extends CustomPainter {
   final bool showLabels;
   final bool showNeedle;
   final List<GaugeRange>? ranges;
+  final String? title;
 
   _GaugePainter({
     required this.min,
@@ -143,6 +147,7 @@ class _GaugePainter extends CustomPainter {
     required this.showLabels,
     required this.showNeedle,
     this.ranges,
+    this.title,
   });
 
   @override
@@ -281,6 +286,33 @@ class _GaugePainter extends CustomPainter {
         canvas,
         center - Offset(textPainter.width / 2, textPainter.height / 2),
       );
+    }
+
+    // Draw title if provided
+    if (title != null && title!.isNotEmpty) {
+      final textStyle = const TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.bold,
+        color: Colors.black,
+      );
+      final titlePainter = TextPainter(
+        text: TextSpan(text: title, style: textStyle),
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      );
+      titlePainter.layout(maxWidth: size.width * 0.8);
+      // Pozycjonowanie: pomiędzy pierwszą a ostatnią wartością (na dole łuku)
+      final labelRadius = radius - thickness - 10;
+      final firstLabelAngle = startAngle;
+      final lastLabelAngle = startAngle + sweepAngle;
+      final firstLabelY = size.height / 2 + labelRadius * sin(firstLabelAngle);
+      final lastLabelY = size.height / 2 + labelRadius * sin(lastLabelAngle);
+      final titleY = (firstLabelY + lastLabelY) / 2 + 18;
+      final titleOffset = Offset(
+        (size.width - titlePainter.width) / 2,
+        titleY,
+      );
+      titlePainter.paint(canvas, titleOffset);
     }
   }
 
