@@ -24,6 +24,8 @@ class GaugeWidget extends StatefulWidget {
   final bool showLabels;
   final bool showNeedle;
   final List<GaugeRange>? ranges;
+  final String? title;
+  final TextStyle? titleStyle;
 
   const GaugeWidget({
     Key? key,
@@ -41,6 +43,8 @@ class GaugeWidget extends StatefulWidget {
     this.showLabels = true,
     this.showNeedle = true,
     this.ranges,
+    this.title,
+    this.titleStyle,
   }) : super(key: key);
 
   @override
@@ -109,6 +113,8 @@ class _GaugeWidgetState extends State<GaugeWidget>
               showLabels: widget.showLabels,
               showNeedle: widget.showNeedle,
               ranges: widget.ranges,
+              title: widget.title,
+              titleStyle: widget.titleStyle,
             ),
             child: null,
           );
@@ -130,6 +136,8 @@ class _GaugePainter extends CustomPainter {
   final bool showLabels;
   final bool showNeedle;
   final List<GaugeRange>? ranges;
+  final String? title;
+  final TextStyle? titleStyle;
 
   _GaugePainter({
     required this.min,
@@ -143,6 +151,8 @@ class _GaugePainter extends CustomPainter {
     required this.showLabels,
     required this.showNeedle,
     this.ranges,
+    this.title,
+    this.titleStyle,
   });
 
   @override
@@ -262,7 +272,7 @@ class _GaugePainter extends CustomPainter {
         textDirection: TextDirection.ltr,
       );
       textPainter.layout();
-      final dotPadding = 12.0;
+      const dotPadding = 12.0;
       final dotRadius = (textPainter.width > textPainter.height
                   ? textPainter.width
                   : textPainter.height) /
@@ -281,6 +291,32 @@ class _GaugePainter extends CustomPainter {
         canvas,
         center - Offset(textPainter.width / 2, textPainter.height / 2),
       );
+    }
+
+    // Draw title if provided
+    if (title != null && title!.isNotEmpty) {
+      final titleTextPainter = TextPainter(
+        text: TextSpan(
+          text: title,
+          style: titleStyle ?? const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+        ),
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      );
+      titleTextPainter.layout(maxWidth: size.width * 0.8);
+
+      final labelRadius = radius - thickness - 10;
+      // Calculate the position for the title based on the label positions
+      final firstLabelAngle = startAngle;
+      final lastLabelAngle = startAngle + sweepAngle;
+      final firstLabelY = center.dy + labelRadius * sin(firstLabelAngle);
+      final lastLabelY = center.dy + labelRadius * sin(lastLabelAngle);
+      final titleY = (firstLabelY + lastLabelY) / 2;
+      final titleOffset = Offset(
+        (size.width - titleTextPainter.width) / 2,
+        titleY + 18, // +18 to position below the labels
+      );
+      titleTextPainter.paint(canvas, titleOffset);
     }
   }
 
