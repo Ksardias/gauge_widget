@@ -320,13 +320,8 @@ class _GaugePainter extends CustomPainter {
         textDirection: TextDirection.ltr,
       );
       titlePainter.layout(maxWidth: size.width * 0.8);
-      // Pozycjonowanie: pomiędzy pierwszą a ostatnią wartością (na dole łuku)
-      final labelRadius = radius - thickness - 10;
-      final firstLabelAngle = startAngle;
-      final lastLabelAngle = startAngle + sweepAngle;
-      final firstLabelY = size.height / 2 + labelRadius * sin(firstLabelAngle);
-      final lastLabelY = size.height / 2 + labelRadius * sin(lastLabelAngle);
-      final titleY = (firstLabelY + lastLabelY) / 2 + 18;
+      // Position title above the gauge
+      final titleY = center.dy - radius - titlePainter.height - 10;
       final titleOffset = Offset(
         (size.width - titlePainter.width) / 2,
         titleY,

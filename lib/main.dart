@@ -49,7 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             GaugeWidget(
-
               min: 0,
               max: 100,
               value: _counter.toDouble(),
@@ -60,6 +59,12 @@ class _MyHomePageState extends State<MyHomePage> {
               valueStyle:
                   const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               showValue: false,
+              title: 'Counter Progress',
+              titleStyle: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
             ),
             const SizedBox(height: 32),
             const Text(
