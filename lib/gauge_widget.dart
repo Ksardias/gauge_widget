@@ -6,6 +6,7 @@ class GaugeRange {
   final double start;
   final double end;
   final Color color;
+
   GaugeRange({required this.start, required this.end, required this.color});
 }
 
@@ -102,16 +103,14 @@ class _GaugeWidgetState extends State<GaugeWidget>
       mainAxisSize: MainAxisSize.max,
       children: [
         if (widget.header != null)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              widget.header!,
-              style: widget.headerStyle ??
-                  const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-              textAlign: TextAlign.center,
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Center(
+              child: Text(
+                widget.header!,
+                style: widget.headerStyle,
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         Expanded(
@@ -326,11 +325,12 @@ class _GaugePainter extends CustomPainter {
 
     // Draw title if provided
     if (title != null && title!.isNotEmpty) {
-      final textStyle = titleStyle ?? const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-        color: Colors.black,
-      );
+      final textStyle = titleStyle ??
+          const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          );
       final titlePainter = TextPainter(
         text: TextSpan(text: title, style: textStyle),
         textAlign: TextAlign.center,
