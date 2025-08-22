@@ -49,7 +49,6 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             GaugeWidget(
-
               min: 0,
               max: 100,
               value: _counter.toDouble(),
@@ -60,6 +59,18 @@ class _MyHomePageState extends State<MyHomePage> {
               valueStyle:
                   const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
               showValue: false,
+              title: "Performance Gauge",
+              titleStyle: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+              ),
+              valueText: "Current Value",
+              valueTextStyle: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey,
+              ),
             ),
             const SizedBox(height: 32),
             const Text(

@@ -26,6 +26,8 @@ class GaugeWidget extends StatefulWidget {
   final List<GaugeRange>? ranges;
   final String? title;
   final TextStyle? titleStyle;
+  final String? valueText;
+  final TextStyle? valueTextStyle;
 
   const GaugeWidget({
     Key? key,
@@ -45,6 +47,8 @@ class GaugeWidget extends StatefulWidget {
     this.ranges,
     this.title,
     this.titleStyle,
+    this.valueText,
+    this.valueTextStyle,
   }) : super(key: key);
 
   @override
@@ -97,8 +101,23 @@ class _GaugeWidgetState extends State<GaugeWidget>
     return LayoutBuilder(
       builder: (context, constraints) {
         return Column(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           children: [
+            // Title above the gauge
+            if (widget.title != null && widget.title!.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16.0),
+                child: Text(
+                  widget.title!,
+                  style: widget.titleStyle ?? const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            // Gauge widget
             Expanded(
               child: AnimatedBuilder(
                 animation: _animation,
@@ -121,8 +140,8 @@ class _GaugeWidgetState extends State<GaugeWidget>
                           showLabels: widget.showLabels,
                           showNeedle: widget.showNeedle,
                           ranges: widget.ranges,
-                          title: widget.title,
-                          titleStyle: widget.titleStyle,
+                          valueText: widget.valueText,
+                          valueTextStyle: widget.valueTextStyle,
                         ),
                         child: null,
                       ),
@@ -150,8 +169,8 @@ class _GaugePainter extends CustomPainter {
   final bool showLabels;
   final bool showNeedle;
   final List<GaugeRange>? ranges;
-  final String? title;
-  final TextStyle? titleStyle;
+  final String? valueText;
+  final TextStyle? valueTextStyle;
 
   _GaugePainter({
     required this.min,
@@ -165,8 +184,8 @@ class _GaugePainter extends CustomPainter {
     required this.showLabels,
     required this.showNeedle,
     this.ranges,
-    this.title,
-    this.titleStyle,
+    this.valueText,
+    this.valueTextStyle,
   });
 
   @override
@@ -307,31 +326,31 @@ class _GaugePainter extends CustomPainter {
       );
     }
 
-    // Draw title if provided
-    if (title != null && title!.isNotEmpty) {
-      final textStyle = titleStyle ?? const TextStyle(
+    // Draw valueText if provided
+    if (valueText != null && valueText!.isNotEmpty) {
+      final textStyle = valueTextStyle ?? const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.bold,
         color: Colors.black,
       );
-      final titlePainter = TextPainter(
-        text: TextSpan(text: title, style: textStyle),
+      final valueTextPainter = TextPainter(
+        text: TextSpan(text: valueText, style: textStyle),
         textAlign: TextAlign.center,
         textDirection: TextDirection.ltr,
       );
-      titlePainter.layout(maxWidth: size.width * 0.8);
+      valueTextPainter.layout(maxWidth: size.width * 0.8);
       // Pozycjonowanie: pomiędzy pierwszą a ostatnią wartością (na dole łuku)
       final labelRadius = radius - thickness - 10;
       final firstLabelAngle = startAngle;
       final lastLabelAngle = startAngle + sweepAngle;
       final firstLabelY = size.height / 2 + labelRadius * sin(firstLabelAngle);
       final lastLabelY = size.height / 2 + labelRadius * sin(lastLabelAngle);
-      final titleY = (firstLabelY + lastLabelY) / 2 + 18;
-      final titleOffset = Offset(
-        (size.width - titlePainter.width) / 2,
-        titleY,
+      final valueTextY = (firstLabelY + lastLabelY) / 2 + 18;
+      final valueTextOffset = Offset(
+        (size.width - valueTextPainter.width) / 2,
+        valueTextY,
       );
-      titlePainter.paint(canvas, titleOffset);
+      valueTextPainter.paint(canvas, valueTextOffset);
     }
   }
 
