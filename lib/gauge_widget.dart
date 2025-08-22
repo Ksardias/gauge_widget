@@ -96,42 +96,40 @@ class _GaugeWidgetState extends State<GaugeWidget>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        return Column(
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Expanded(
-              child: AnimatedBuilder(
-                animation: _animation,
-                builder: (_, __) {
-                  final double size = min(constraints.maxWidth, constraints.maxHeight);
-                  return Center(
-                    child: SizedBox(
-                      width: size,
-                      height: size,
-                      child: CustomPaint(
-                        painter: _GaugePainter(
-                          min: widget.min,
-                          max: widget.max,
-                          value: _animation.value,
-                          thickness: widget.thickness,
-                          backgroundColor: widget.backgroundColor,
-                          progressColor: widget.progressColor,
-                          needleColor: widget.needleColor,
-                          labelStyle: widget.labelStyle,
-                          showLabels: widget.showLabels,
-                          showNeedle: widget.showNeedle,
-                          ranges: widget.ranges,
-                          title: widget.title,
-                          titleStyle: widget.titleStyle,
-                        ),
-                        child: null,
-                      ),
-                    ),
-                  );
-                },
+        final double side = min(
+          widget.size,
+          min(constraints.maxWidth,
+              constraints.maxHeight.isFinite ? constraints.maxHeight : constraints.maxWidth),
+        );
+        return AnimatedBuilder(
+          animation: _animation,
+          builder: (_, __) {
+            final double size = min(constraints.maxWidth, constraints.maxHeight);
+            return Center(
+              child: SizedBox(
+                width: side,
+                height: side,
+                child: CustomPaint(
+                  painter: _GaugePainter(
+                    min: widget.min,
+                    max: widget.max,
+                    value: _animation.value,
+                    thickness: widget.thickness,
+                    backgroundColor: widget.backgroundColor,
+                    progressColor: widget.progressColor,
+                    needleColor: widget.needleColor,
+                    labelStyle: widget.labelStyle,
+                    showLabels: widget.showLabels,
+                    showNeedle: widget.showNeedle,
+                    ranges: widget.ranges,
+                    title: widget.title,
+                    titleStyle: widget.titleStyle,
+                  ),
+                  child: null,
+                ),
               ),
-            ),
-          ],
+            );
+          },
         );
       },
     );

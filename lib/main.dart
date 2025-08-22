@@ -48,20 +48,18 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Expanded(
-              child: GaugeWidget(
-                title: "title",
-                min: 0,
-                max: 100,
-                value: _counter.toDouble(),
-                size: 420,
-                thickness: 18,
-                backgroundColor: Colors.grey.shade300,
-                progressColor: Colors.blueAccent,
-                valueStyle:
-                    const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
-                showValue: false,
-              ),
+            GaugeWidget(
+              title: "title",
+              min: 0,
+              max: 100,
+              value: _counter.toDouble(),
+              size: 420,
+              thickness: 18,
+              backgroundColor: Colors.grey.shade300,
+              progressColor: Colors.blueAccent,
+              valueStyle:
+                  const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              showValue: false,
             ),
             const SizedBox(height: 32),
             const Text(
