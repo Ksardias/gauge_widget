@@ -26,6 +26,8 @@ class GaugeWidget extends StatefulWidget {
   final List<GaugeRange>? ranges;
   final String? title;
   final TextStyle? titleStyle;
+  final String? header;
+  final TextStyle? headerStyle;
 
   const GaugeWidget({
     Key? key,
@@ -45,6 +47,8 @@ class GaugeWidget extends StatefulWidget {
     this.ranges,
     this.title,
     this.titleStyle,
+    this.header,
+    this.headerStyle,
   }) : super(key: key);
 
   @override
@@ -94,44 +98,59 @@ class _GaugeWidgetState extends State<GaugeWidget>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final double side = min(
-          widget.size,
-          min(constraints.maxWidth,
-              constraints.maxHeight.isFinite ? constraints.maxHeight : constraints.maxWidth),
-        );
-        return AnimatedBuilder(
-          animation: _animation,
-          builder: (_, __) {
-            final double size = min(constraints.maxWidth, constraints.maxHeight);
-            return Center(
-              child: SizedBox(
-                width: side,
-                height: side,
-                child: CustomPaint(
-                  painter: _GaugePainter(
-                    min: widget.min,
-                    max: widget.max,
-                    value: _animation.value,
-                    thickness: widget.thickness,
-                    backgroundColor: widget.backgroundColor,
-                    progressColor: widget.progressColor,
-                    needleColor: widget.needleColor,
-                    labelStyle: widget.labelStyle,
-                    showLabels: widget.showLabels,
-                    showNeedle: widget.showNeedle,
-                    ranges: widget.ranges,
-                    title: widget.title,
-                    titleStyle: widget.titleStyle,
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        if (widget.header != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              widget.header!,
+              style: widget.headerStyle ??
+                  const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                  child: null,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        Expanded(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              final double size =
+                  min(constraints.maxWidth, constraints.maxHeight);
+              return Center(
+                child: AnimatedBuilder(
+                  animation: _animation,
+                  builder: (_, __) {
+                    return SizedBox(
+                      width: size,
+                      height: size,
+                      child: CustomPaint(
+                        painter: _GaugePainter(
+                          min: widget.min,
+                          max: widget.max,
+                          value: _animation.value,
+                          thickness: widget.thickness,
+                          backgroundColor: widget.backgroundColor,
+                          progressColor: widget.progressColor,
+                          needleColor: widget.needleColor,
+                          labelStyle: widget.labelStyle,
+                          showLabels: widget.showLabels,
+                          showNeedle: widget.showNeedle,
+                          ranges: widget.ranges,
+                          title: widget.title,
+                          titleStyle: widget.titleStyle,
+                        ),
+                      ),
+                    );
+                  },
                 ),
-              ),
-            );
-          },
-        );
-      },
+              );
+            },
+          ),
+        ),
+      ],
     );
   }
 }
