@@ -123,26 +123,26 @@ class _GaugeWidgetState extends State<GaugeWidget>
                   animation: _animation,
                   builder: (_, __) {
                     return SizedBox(
-                      width: size,
-                      height: size,
-                      child: CustomPaint(
-                        painter: _GaugePainter(
-                          min: widget.min,
-                          max: widget.max,
-                          value: _animation.value,
-                          thickness: widget.thickness,
-                          backgroundColor: widget.backgroundColor,
-                          progressColor: widget.progressColor,
-                          needleColor: widget.needleColor,
-                          labelStyle: widget.labelStyle,
-                          showLabels: widget.showLabels,
-                          showNeedle: widget.showNeedle,
-                          ranges: widget.ranges,
-                          title: widget.title,
-                          titleStyle: widget.titleStyle,
-                        ),
-                      ),
-                    );
+                        width: size,
+                        height: size,
+                        child: CustomPaint(
+                          painter: _GaugePainter(
+                            min: widget.min,
+                            max: widget.max,
+                            value: _animation.value,
+                            thickness: widget.thickness,
+                            backgroundColor: widget.backgroundColor,
+                            progressColor: widget.progressColor,
+                            needleColor: widget.needleColor,
+                            labelStyle: widget.labelStyle,
+                            showLabels: widget.showLabels,
+                            showNeedle: widget.showNeedle,
+                            ranges: widget.ranges,
+                            title: widget.title,
+                            titleStyle: widget.titleStyle,
+                            valueStyle: widget.valueStyle,
+                          ),
+                        ));
                   },
                 ),
               );
@@ -168,7 +168,7 @@ class _GaugePainter extends CustomPainter {
   final List<GaugeRange>? ranges;
   final String? title;
   final TextStyle? titleStyle;
-
+  final TextStyle? valueStyle;
   _GaugePainter({
     required this.min,
     required this.max,
@@ -183,6 +183,7 @@ class _GaugePainter extends CustomPainter {
     this.ranges,
     this.title,
     this.titleStyle,
+    this.valueStyle,
   });
 
   @override
@@ -295,8 +296,7 @@ class _GaugePainter extends CustomPainter {
       final textPainter = TextPainter(
         text: TextSpan(
           text: valueText,
-          style: const TextStyle(
-              fontSize: 18, color: Colors.black, fontWeight: FontWeight.bold),
+          style: valueStyle,
         ),
         textAlign: TextAlign.center,
         textDirection: TextDirection.ltr,
